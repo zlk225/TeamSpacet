@@ -1,0 +1,89 @@
+#MySQL4
+spring:
+    # 配置redis
+#    session:
+#      store-type: redis
+    redis:
+        host: 127.0.0.1
+        port: 6379
+        timeout: 3600
+        database: 8
+    jmx:
+      default-domain: space
+    datasource:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:3306/person_space?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false
+      username: root
+      password: root
+      type: com.alibaba.druid.pool.DruidDataSource
+      # 下面为连接池的补充设置，应用到上面所有数据源中
+      # 初始化大小，最小，最大
+      initialSize: 1
+      minIdle: 3
+      maxActive: 100
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 30000
+      validationQuery: select 'x'
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，
+       # 'wall'用于防火墙(wall已经注释掉, 并在druidConfiguration加入并设置allowMultiStatement为true)
+      #监控统计拦截的filters
+      filters: stat,wall,log4j
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connectionProperties:
+        druid:
+          stat:
+            mergeSql: true
+            slowSqlMillis: 5000
+      # 合并多个DruidDataSource的监控数据
+      useGlobalDataSourceStat: true
+
+    #prefix静态模板文件路径,suffix静态模板文件后缀名
+    thymeleaf:
+      prefix: classpath:/templates/
+      suffix: .html
+      encoding: UTF-8
+      cache: false
+      mode: LEGACYHTML5
+
+  #生产环境prod，测试环境test，开发环境dev，用来区分要不要打印日志
+  #prod：控制台和log都不会打印日志，只有当error日志才会打印到log中
+  #test：控制台和log都会打印日志，这个是最全的
+  #dev：控制台会打印日志，log不打印日志
+    profiles:
+      active: test
+
+#mybatis
+mybatis:
+  mapperLocations: classpath:mapper/**/*.xml
+  typeAliasesPackage: cn.moling.**.domain
+
+
+web:
+  upload-path: /data
+  download-temp-path: /data/dawnload/temp
+
+#其它自定义属性
+myProps:
+  props:
+    config-path: /static/data    #项目启动后生成的配置文件路径
+    config-name: configyml.js   #生成配置文件的名称
+    open-socket: "off"  # on ： 启动socket    off： 关闭socket服务
+    port: 3020  #socket端口
+    socket-real-ip: 192.168.44.154    #socket服务真实ip地址即部署项目所在的ip地址，不可以用127.0.0.1
+    host: 192.168.44.154   #socket外网映射地址/也可以是ip
+    system-id: space
+
+#自定义参数，可以迁移走
+token:
+  expirationSeconds: 300  #token失效时间（不是refreshToken）(这是自定义的)(秒)
+  validTime: 7  #默认7天登录有效(根据业务更改)
