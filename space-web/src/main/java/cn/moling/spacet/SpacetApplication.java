@@ -12,6 +12,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 public class SpacetApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(SpacetApplication.class, args);
 	}
 
